@@ -12,23 +12,24 @@ function TextInputForm({inputType, handleFormSubmit, handleTextInputChange, hand
                 placeholder={"Enter a word or phrase here ..."}
                 onChangeHandler={handleTextInputChange}
             />
-        </div>
+            </div>
 
-        <div>
-            <Button 
-                text={inputType === "password" ? "Show" : "Hide"} 
-                styleType={"warning"} 
-                onClickHandler={handleShowHideClick} 
-            />
-        </div>
+            <div>
+                <Button 
+                    styleType={"warning"}
+                    text={inputType === "password" ? "Show" : "Hide"}
+                    onClickHandler={handleShowHideClick}
+                />
+            </div>
 
-        <div>
-            <Button 
-                text={"Submit"} 
-                styleType={"primary"} 
-                onClickHandler={() => console.log("Submitted")} 
-            />  
-        </div>
+            <div>
+                <Button 
+                    type={"submit"}
+                    text={"Submit"} 
+                    styleType={"primary"} 
+                    onClickHandler={() => console.log("Submitted")} 
+                />  
+            </div>
 
         </form>
     )
