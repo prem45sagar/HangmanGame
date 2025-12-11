@@ -7,16 +7,12 @@ function TextInputFormContainer() {
     const navigate = useNavigate(); // use Navgigate is a hook that returns a navigate function to programmatically navigate to a different route
 
     const [inputType, setInputType] = useState("password");
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(""); 
 
     function handleFormSubmit(event) {
         event.preventDefault();
         console.log("Form Submitted", value);
-        if(value){
-            // If we have something in the value, then we want to go the play page
-            navigate('/play', {state: {wordToGuess: value}}); // navigate to play page with state
-        }
-        
+        navigate(`/play`, { state: { wordselected: value } }); // Navigate to the /play route with the entered text as a query parameter
     }
 
     function handleTextInputChange(event) {
