@@ -2,8 +2,6 @@ import getButtonStyling from "./getButtonStyling.js";
 
 function Button({ text, onClickHandler, styleType = "primary", type="button" }) {
 
-    console.log(text); // object
-
     return (
         <button 
             onClick={onClickHandler}
@@ -14,7 +12,5 @@ function Button({ text, onClickHandler, styleType = "primary", type="button" }) 
         </button>
     );
 }
-
-
 
 export default Button;

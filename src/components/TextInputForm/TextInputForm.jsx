@@ -26,11 +26,9 @@ function TextInputForm({inputType, handleFormSubmit, handleTextInputChange, hand
                 <Button 
                     type={"submit"}
                     text={"Submit"} 
-                    styleType={"primary"} 
-                    onClickHandler={() => console.log("Submitted")} 
+                    styleType={"primary"}
                 />  
             </div>
-
         </form>
     )
 }

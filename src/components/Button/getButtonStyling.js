@@ -11,4 +11,5 @@ function getButtonStyling(styleType) {
         return "text-white bg-yellow-500 px-4 py-2 ";
     } 
 }
+
 export default getButtonStyling;

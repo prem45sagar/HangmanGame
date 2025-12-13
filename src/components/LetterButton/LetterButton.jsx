@@ -1,4 +1,3 @@
-
 const ALPHABETS = "QWERTYUIOPASDFGHJKLZXCVBNM".split('');
 
 function LetterButton({text, guessedLetters, onLetterClick}) {
@@ -11,12 +10,12 @@ function LetterButton({text, guessedLetters, onLetterClick}) {
             return `${originalLetters.has(letter) ? 'bg-green-600 cursor-not-allowed' : 'bg-red-500 cursor-not-allowed'}`;
         }
         else {
-            return 'bg-blue-500 hover:bg-blue-700';
+            return 'bg-blue-500';
         }
     };
 
     function handleLetterClick(event) {
-        const characterOftheLetter = event.target.innerText;
+        const characterOftheLetter = event.target.value;
         onLetterClick?.(characterOftheLetter);
     }
 
@@ -31,7 +30,6 @@ function LetterButton({text, guessedLetters, onLetterClick}) {
         )
             
     })
-
 
     return (
         <>

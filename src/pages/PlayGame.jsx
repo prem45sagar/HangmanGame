@@ -1,8 +1,10 @@
 import { Link, useSearchParams, useParams, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MaskedText from "../components/MaskedText/MaskedText";
 import LetterButton from "../components/LetterButton/LetterButton";
 import Hangman from "../components/Hangman/Hangman";
+// import { WordContext } from "../Context/WordContext";
+import useWordStore from "../Stores/WordStore";
 
 function PlayGame() {
 
@@ -30,13 +32,15 @@ function PlayGame() {
 
     */}
 
-    const { state } = useLocation();
+
+    const {wordList,word} = useWordStore();
+
     const [ guessedLetters, setGuessedLetters ] = useState([]);
 
     const [step, setStep] = useState(0);
 
     function handleLetterClick(letter) {
-        if(state.wordselected.toUpperCase().includes(letter)) {
+        if(word?.toUpperCase().includes(letter)) {
             console.log('Correct Letter');
         }
         else{
@@ -47,21 +51,29 @@ function PlayGame() {
     }
 
     return (
-        <div>
-            <h1>Play Game Page</h1>
-            <MaskedText text={state.wordselected} guessedLetters={guessedLetters} />
-            <div>
-                <LetterButton text={state.wordselected} guessedLetters={guessedLetters} onLetterClick={handleLetterClick} />
-            </div>
-            <div>
-                <Hangman step={step} />
-            </div>
-            <Link to="/start" className="text-blue-400">Start Game Link</Link>
+        <>
+            <h1>Play Game</h1>
 
-            
-        </div>
+            {wordList.map((word) => {
+                return <li key={word.id}>{word.wordValue}</li>
+            })}
 
-    )
+            {word && (
+                <>
+                    <MaskedText text={word} guessedLetters={guessedLetters} />
+                    <div>
+                        <LetterButton text={word} guessedLetters={guessedLetters} onLetterClick={handleLetterClick} />
+                    </div>
+                    <div>
+                        <Hangman step={step} />
+                    </div>
+                </>
+            )}
+            <Link to="/">Home</Link>
+            <br />
+            <Link to='/start' className='text-blue-400'>Start Game Link</Link>
+        </>
+    );
 }
 
 export default PlayGame;
