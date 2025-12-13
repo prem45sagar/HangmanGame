@@ -8,6 +8,7 @@
  */
 
 export function getMaskedString(originalWord, guessedLetters) {
+    console.log("guessedLetters", guessedLetters);
     guessedLetters = guessedLetters.map(letter => letter.toUpperCase()); // ['h', 'M', 'e'] -> ['H', 'M', 'E'] Convert guessed letters to uppercase for case-insensitive comparison
     const guessedLetterSet = new Set(guessedLetters); // Convert guessed letters array to a Set for efficient lookup
     const result = originalWord.toUpperCase().split('').map(char => {
