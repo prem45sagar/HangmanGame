@@ -22,6 +22,7 @@ function LetterButton({text, guessedLetters, onLetterClick}) {
     const buttons = ALPHABETS.map(letter => {
         return (
             <button key={`button-${letter}`}
+                value={letter}
                 onClick={handleLetterClick}
                 disabled={guessedLettersSet.has(letter)}
                 className={`h-12 w-12 m-1 text-white rounded-full font-bold text-lg ${buttonstyle(letter)}`}>

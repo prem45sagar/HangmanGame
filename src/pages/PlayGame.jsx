@@ -35,7 +35,7 @@ function PlayGame() {
 
     const {wordList,word} = useWordStore();
 
-    const [ guessedLetters, setGuessedLetters ] = useState([]);
+    const [guessedLetters, setGuessedLetters] = useState([]);
 
     const [step, setStep] = useState(0);
 
