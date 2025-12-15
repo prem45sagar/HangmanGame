@@ -25,12 +25,12 @@ function TextInputForm({inputType, handleFormSubmit, handleTextInputChange, hand
             <div>
                 <Button 
                     type={"submit"}
-                    text={"Submit"} 
                     styleType={"primary"}
+                    text={"Submit"} 
                 />  
             </div>
         </form>
-    )
+    );
 }
 
 export default TextInputForm;

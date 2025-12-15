@@ -8,7 +8,7 @@ function Home() {
 
     // const{setWord} = useContext(WordContext);
 
-    const {setWordList,setWord} = useWordStore(); // coming from the store
+    const {setWordList, setWord} = useWordStore(); // coming from the store
 
     async function fetchWords(){
         const response = await fetch('http://localhost:3000/words')
@@ -35,7 +35,7 @@ function Home() {
             <br />
             <Link to="/start">
                 <div className="mt-4">
-                    <Button text="MultiPlayer Game" styleType="secondary"/>
+                    <Button text="MultiPlayer Game" styleType="secondary" />
                 </div>
             </Link>
         </>
