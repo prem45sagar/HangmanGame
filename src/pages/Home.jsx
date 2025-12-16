@@ -3,12 +3,14 @@ import Button from "../components/Button/Button";
 import { useContext, useEffect} from "react";
 // import { WordContext } from "../Context/WordContext";
 import useWordStore from "../Stores/WordStore";
+import SinglePlayerImg from "../assets/Images/SinglePlayer.png";
+import MultiPlayerImg from "../assets/Images/MultiPlayer.png";
 
 function Home() {
 
     // const{setWord} = useContext(WordContext);
 
-    const {setWordList, setWord} = useWordStore(); // coming from the store
+    const {setWordList, setWord, setWordHint} = useWordStore(); // coming from the store
 
     async function fetchWords(){
         const response = await fetch('http://localhost:3000/words')
@@ -20,7 +22,8 @@ function Home() {
         const randomIndex = Math.floor(Math.random() * data.length);
         console.log(data[randomIndex]);
 
-        setWord(data[randomIndex].wordValue);   
+        setWord(data[randomIndex].wordValue);
+        setWordHint(data[randomIndex].wordHint);
     }
 
     useEffect(()=>{
@@ -28,17 +31,32 @@ function Home() {
     },[]);
 
     return (
-        <>
-            <Link to='/play'>
-                <Button text="SinglePlayer Game" />
-            </Link>
-            <br />
-            <Link to="/start">
-                <div className="mt-4">
-                    <Button text="MultiPlayer Game" styleType="secondary" />
+        <div className="page-shell page-animate">
+            <div className="card stack-lg">
+                <header className="section-animate">
+                    <h1 className="title">Hangman</h1>
+                    <p className="subtitle">A clean, modern take on the classic word-guessing challenge.</p>
+                </header>
+                <div className="section-animate delay-1 card-grid">
+                    <Link to="/play">
+                        <div className="choice-card singleplayer">
+                            <div className="art">
+                                <img src={SinglePlayerImg} alt="Single player card" />
+                            </div>
+                            <div className="label">Single Player</div>
+                        </div>
+                    </Link>
+                    <Link to="/start">
+                        <div className="choice-card multiplayer">
+                            <div className="art">
+                                <img src={MultiPlayerImg} alt="Multiplayer card" />
+                            </div>
+                            <div className="label">Multiplayer</div>
+                        </div>
+                    </Link>
                 </div>
-            </Link>
-        </>
+            </div>
+        </div>
     )
 
 }

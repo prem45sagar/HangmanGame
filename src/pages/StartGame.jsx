@@ -3,11 +3,18 @@ import TextInputFormContainer from "../components/TextInputForm/TextInputFormCon
 
 function StartGame() {
     return (
-        <>
-            <h1>Start Game</h1>
-            <TextInputFormContainer />
-            <Link to='/play' className="text-blue-400">Play Game Link</Link>
-        </>
+        <div className="page-shell page-animate">
+            <div className="card stack-lg">
+                <div className="section-animate">
+                    <h1 className="title">Multiplayer</h1>
+                    <p className="subtitle">Set a secret word and hint. Hand it off, then head to Play.</p>
+                </div>
+                <div className="section-animate delay-1">
+                    <TextInputFormContainer />
+                </div>
+                <Link to='/play' className="link section-animate delay-2">Go to Play</Link>
+            </div>
+        </div>
     )
 }
 

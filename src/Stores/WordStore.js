@@ -5,6 +5,7 @@ import {create} from 'zustand'
 const useWordStore = create((set) => ({
     wordList: [],
     word: '',
+    wordHint: '',
     setWordList: (list) => {
         set((state) => {
             console.log("state printing", state);
@@ -20,6 +21,14 @@ const useWordStore = create((set) => ({
             return {
                 ...state,
                 word: newWord
+            }
+        });
+    },
+    setWordHint: (newHint) => {
+        set((state) => {
+            return {
+                ...state,
+                wordHint: newHint
             }
         });
     }

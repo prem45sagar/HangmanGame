@@ -1,0 +1,52 @@
+<svg width="320" height="480" viewBox="0 0 320 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="multi-frame" x1="40" y1="40" x2="280" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="28" y="28" width="264" height="424" rx="30" fill="#0b1221" opacity="0.85"/>
+  <rect x="42" y="44" width="236" height="392" rx="26" fill="url(#multi-frame)" opacity="0.25"/>
+  <rect x="56" y="68" width="208" height="344" rx="22" fill="#0f172a" opacity="0.9"/>
+
+  <!-- subtle stand -->
+  <g stroke="#1f2937" stroke-width="10" stroke-linecap="round">
+    <path d="M88 360h144" />
+    <path d="M116 140v220" />
+    <path d="M116 140h76" />
+    <path d="M192 140v34" />
+  </g>
+
+  <!-- two-player motif -->
+  <g stroke="#e2e8f0" stroke-linecap="round" stroke-linejoin="round">
+    <!-- left -->
+    <circle cx="148" cy="142" r="26" fill="#0f172a" stroke-width="7"/>
+    <path d="M136 138c6-4 12-4 18 0" stroke-width="5"/>
+    <circle cx="142" cy="140" r="3" fill="#e2e8f0"/>
+    <circle cx="154" cy="140" r="3" fill="#e2e8f0"/>
+    <path d="M132 158c10 8 24 8 34 0" stroke-width="5"/>
+
+    <path d="M148 168v48" stroke-width="8"/>
+    <path d="M148 196l-26 26" stroke-width="8"/>
+    <path d="M148 196l26 26" stroke-width="8"/>
+    <rect x="132" y="208" width="32" height="52" rx="11" fill="#f97316" stroke="none"/>
+    <path d="M144 260l-18 44" stroke-width="8"/>
+    <path d="M152 260l18 44" stroke-width="8"/>
+
+    <!-- right -->
+    <circle cx="210" cy="166" r="28" fill="#0f172a" stroke-width="7"/>
+    <path d="M198 160c6-4 12-4 18 0" stroke-width="5"/>
+    <circle cx="204" cy="162" r="3" fill="#e2e8f0"/>
+    <circle cx="216" cy="162" r="3" fill="#e2e8f0"/>
+    <path d="M194 182c11 9 28 9 39 0" stroke-width="5"/>
+
+    <path d="M210 186v54" stroke-width="8"/>
+    <path d="M210 214l-28 28" stroke-width="8"/>
+    <path d="M210 214l28 28" stroke-width="8"/>
+    <rect x="192" y="228" width="36" height="56" rx="12" fill="#a855f7" stroke="none"/>
+    <path d="M202 284l-18 42" stroke-width="8"/>
+    <path d="M218 284l18 42" stroke-width="8"/>
+  </g>
+</svg>
+
