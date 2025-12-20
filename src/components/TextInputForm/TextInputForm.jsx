@@ -1,24 +1,37 @@
 import TextInput from "../TextInput/TextInput";
 import Button from "../Button/Button";
 
-function TextInputForm({inputType, handleFormSubmit, handleTextInputChange, handleShowHideClick}) {
+function TextInputForm({ wordValue, wordHint, wordInputType, handleFormSubmit, handleWordValueChange, handleWordHintChange, handleToggleWordVisibility }) {
 
     return (
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit} className="stack-md">
             <div>
-            <TextInput 
-                type={inputType}
-                label={"Enter a word or phrase"}
-                placeholder={"Enter a word or phrase here ..."}
-                onChangeHandler={handleTextInputChange}
-            />
+                <div className="flex items-end gap-2">
+                    <div className="flex-1">
+                        <TextInput 
+                            type={wordInputType}
+                            label={"Enter Word Value"}
+                            placeholder={"Type the word to guess"}
+                            onChangeHandler={handleWordValueChange}
+                            value={wordValue}
+                        />
+                    </div>
+                    <Button 
+                        type="button"
+                        styleType={"warning"}
+                        text={wordInputType === "password" ? "Show" : "Hide"}
+                        onClickHandler={handleToggleWordVisibility}
+                    />
+                </div>
             </div>
 
             <div>
-                <Button 
-                    styleType={"warning"}
-                    text={inputType === "password" ? "Show" : "Hide"}
-                    onClickHandler={handleShowHideClick}
+                <TextInput 
+                    type="text"
+                    label={"Enter Word Hint"}
+                    placeholder={"Type a hint for this word"}
+                    onChangeHandler={handleWordHintChange}
+                    value={wordHint}
                 />
             </div>
 
@@ -26,7 +39,7 @@ function TextInputForm({inputType, handleFormSubmit, handleTextInputChange, hand
                 <Button 
                     type={"submit"}
                     styleType={"primary"}
-                    text={"Submit"} 
+                    text={"Start Multiplayer"} 
                 />  
             </div>
         </form>

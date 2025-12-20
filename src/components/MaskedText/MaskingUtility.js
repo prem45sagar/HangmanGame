@@ -16,7 +16,7 @@ export function getMaskedString(originalWord, guessedLetters) {
             return char;
         }
         else {
-            return "_";
+            return "-"; // show dash for unguessed letters
         }
     }); // ['H', '_', 'M', '_', '_', 'E' ]
 

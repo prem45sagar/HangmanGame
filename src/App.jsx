@@ -14,9 +14,9 @@ function App() {
   return (
     <WordContext.Provider value={{wordList, setWordList, word, setWord}}>
       <Routes>
-      <Route path='/start' element={<StartGame />} /> 
-      <Route path='/play' element={<PlayGame />} />
-      <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/start' element={<StartGame />} /> 
+        <Route path='/play' element={<PlayGame />} />
     </Routes>
     </WordContext.Provider>
   )
