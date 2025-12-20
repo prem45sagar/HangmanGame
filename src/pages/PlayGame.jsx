@@ -108,6 +108,9 @@ function PlayGame() {
     if (!word) {
       fetchRandomWord();
     }
+    if (!word) {
+      fetchRandomWord();
+    }
   }, [fetchRandomWord, word]);
   
 
