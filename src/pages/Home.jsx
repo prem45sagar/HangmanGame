@@ -1,34 +1,17 @@
 import { Link } from "react-router-dom";
 import Button from "../components/Button/Button";
-import { useContext, useEffect} from "react";
-// import { WordContext } from "../Context/WordContext";
+import { useEffect } from "react";
 import useWordStore from "../Stores/WordStore";
 import SinglePlayerImg from "../assets/Images/SinglePlayer.png";
 import MultiPlayerImg from "../assets/Images/MultiPlayer.png";
 
 function Home() {
+    const { fetchRandomWord } = useWordStore();
 
-    // const{setWord} = useContext(WordContext);
-
-    const {setWordList, setWord, setWordHint} = useWordStore(); // coming from the store
-
-    async function fetchWords(){
-        const response = await fetch('http://localhost:3000/words')
-        const data = await response.json();
-        console.log(data);
-
-        setWordList([...data])
-
-        const randomIndex = Math.floor(Math.random() * data.length);
-        console.log(data[randomIndex]);
-
-        setWord(data[randomIndex].wordValue);
-        setWordHint(data[randomIndex].wordHint);
-    }
-
-    useEffect(()=>{
-        fetchWords();
-    },[]);
+    // Set initial word when component mounts
+    useEffect(() => {
+        fetchRandomWord();
+    }, [fetchRandomWord]);
 
     return (
         <div className="page-shell page-animate">
@@ -57,8 +40,7 @@ function Home() {
                 </div>
             </div>
         </div>
-    )
-
+    );
 }
 
 export default Home;

@@ -52,7 +52,7 @@
 
 /* Global look & feel */
 * {
-  box-sizing: border-box;
+  box-sizing: content-box;
 }
 
 body {

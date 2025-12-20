@@ -7,13 +7,14 @@ import Level6 from '../../assets/Images/Level6.svg';
 import Level7 from '../../assets/Images/Level7.svg';
 import Level8 from '../../assets/Images/Level8.svg';
 
-function Hangman({step}){
+function Hangman({ step, className = "" }) {
     const Images = [Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8];
 
     return (
-        <div className="w-[300px] h-[300px]">
+        <div className={`w-[300px] h-[300px] ${className}`}>
             <img 
                 src={step >= Images.length ? Images[Images.length - 1] : Images[step]}
+                alt={`Hangman step ${step + 1}`}
             />
         </div>
     );

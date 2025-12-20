@@ -12,7 +12,6 @@ function StartGame() {
                 <div className="section-animate delay-1">
                     <TextInputFormContainer />
                 </div>
-                <Link to='/play' className="link section-animate delay-2">Go to Play</Link>
             </div>
         </div>
     )

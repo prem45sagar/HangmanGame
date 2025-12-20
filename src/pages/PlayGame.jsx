@@ -1,29 +1,89 @@
 import { Link } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import MaskedText from "../components/MaskedText/MaskedText";
 import LetterButton from "../components/LetterButton/LetterButton";
 import Hangman from "../components/Hangman/Hangman";
 import useWordStore from "../Stores/WordStore";
-import { FaPause, FaPlay, FaVolumeUp, FaHome, FaRedo, FaTimes } from "react-icons/fa";
+import PauseButton from "../components/PauseButton/PauseButton";
+import WellDoneOverlay from "../components/WellDoneOverlay/WellDoneOverlay";
+import GameOverOverlay from "../components/GameOverOverlay/GameOverOverlay";
+import { FaHome, FaRedo } from "react-icons/fa";
 
 function PlayGame() {
-  const { word, wordHint } = useWordStore();
+  const { word, wordHint, fetchRandomWord } = useWordStore();
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [step, setStep] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
+  const [score, setScore] = useState(0);
+  const [gems, setGems] = useState(0);
   const [volume, setVolume] = useState(50);
-  const volumeSliderRef = useRef(null);
+
+  const calculateScore = (word, incorrectGuesses) => {
+    const baseScore = 10;
+    const maxIncorrect = 7; // Maximum allowed incorrect guesses
+    const penaltyPerIncorrect = 5;
+    const wordBonus = word.length * 5; // Bonus based on word length
+    
+    // Calculate score with penalty for incorrect guesses
+    let finalScore = baseScore + wordBonus - (incorrectGuesses * penaltyPerIncorrect);
+    
+    // Ensure score doesn't go below 0
+    return Math.max(0, finalScore);
+  };
+
+  const calculateGems = (word, incorrectGuesses) => {
+    // Base gems + bonus for word length - penalty for incorrect guesses
+    const baseGems = 5;
+    const lengthBonus = Math.floor(word.length / 2);
+    const incorrectPenalty = Math.floor(incorrectGuesses / 2);
+    
+    let gems = baseGems + lengthBonus - incorrectPenalty;
+    return Math.max(1, gems); // Always give at least 1 gem
+  };
 
   function handleLetterClick(letter) {
-    if (isPaused) return; // Don't process letter clicks when paused
+    if (isPaused || isGameOver || !word) return;
     
-    if (word?.toUpperCase().includes(letter)) {
-      console.log('Correct Letter');
+    // Don't process already guessed letters
+    if (guessedLetters.includes(letter)) return;
+    
+    const newGuessedLetters = [...guessedLetters, letter];
+    setGuessedLetters(newGuessedLetters);
+    
+    const upperWord = word.toUpperCase();
+    
+    if (upperWord.includes(letter)) {
+      // Check if the word is completely guessed
+      const isWordGuessed = upperWord.split('').every(char => 
+        newGuessedLetters.includes(char)
+      );
+      
+      if (isWordGuessed) {
+        // Calculate final score and gems
+        const incorrectGuesses = newGuessedLetters.filter(l => !upperWord.includes(l)).length;
+        const finalScore = calculateScore(word, incorrectGuesses);
+        const gemsEarned = calculateGems(word, incorrectGuesses);
+        
+        setScore(prev => prev + finalScore);
+        setGems(prev => prev + gemsEarned);
+        setIsGameOver(true);
+        setIsWinner(true);
+      }
     } else {
-      console.log('Incorrect Letter');
-      setStep(step + 1);
+      const newStep = step + 1;
+      setStep(newStep);
+      
+      // Check if game over due to too many incorrect guesses
+      if (newStep >= 7) {
+        // On loss, don't add to score or gems
+        setScore(0);
+        setGems(0);
+        setIsGameOver(true);
+        setIsWinner(false);
+      }
     }
-    setGuessedLetters([...guessedLetters, letter]);
   }
 
   const togglePause = () => {
@@ -34,109 +94,114 @@ function PlayGame() {
     setVolume(e.target.value);
   };
 
-  const handleRestart = () => {
+  const handleNewGame = async () => {
     setGuessedLetters([]);
     setStep(0);
+    setIsGameOver(false);
+    setIsWinner(false);
     setIsPaused(false);
+    // Don't reset score and gems between games
+    await fetchRandomWord();
   };
+
+  useEffect(() => {
+    if (!word) {
+      fetchRandomWord();
+    }
+  }, [fetchRandomWord, word]);
+  
 
   return (
     <div className="page-shell page-animate relative min-h-screen">
-      {/* Pause Button */}
-      <button
-        onClick={togglePause}
-        className="fixed top-5 right-5 w-12 h-12 rounded-full bg-red-500 text-white text-2xl flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300 z-20"
-      >
-        {isPaused ? <FaPlay /> : <FaPause />}
-      </button>
+      <div className="container mx-auto px-4 py-5">
 
-      {/* Pause Screen Overlay */}
-      {isPaused && (
-        <div className="fixed inset-0 bg-white bg-opacity-95 flex flex-col items-center justify-center z-30 p-5">
-          <button
-            onClick={togglePause}
-            className="absolute top-5 right-5 text-2xl text-red-500 hover:text-red-700"
-          >
-            <FaTimes />
-          </button>
+        {/* Well Done Overlay - shown when player wins */}
+        {isGameOver && isWinner && (
+          <WellDoneOverlay
+            score={score}
+            gems={gems}
+            onContinue={handleNewGame}
+          />
+        )}
 
-          <h1 className="text-5xl font-bold mb-8">Paused</h1>
-          
-          <div className="w-full max-w-xs flex items-center mb-8">
-            <FaVolumeUp className="text-blue-500 text-2xl mr-4" />
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={volume}
-              onChange={handleVolumeChange}
-              ref={volumeSliderRef}
-              className="w-full h-2 bg-pink-200 rounded-lg appearance-none cursor-pointer"
-              style={{
-                background: `linear-gradient(to right, #ff9e9e 0%, #ff9e9e ${volume}%, #f0f0f0 ${volume}%, #f0f0f0 100%)`
-              }}
-            />
-          </div>
-          
-          <div className="flex gap-6 mt-4">
-            <Link
-              to="/"
-              className="w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center text-2xl text-orange-500 hover:bg-gray-100 transition-colors"
-              title="Home"
-            >
-              <FaHome />
-            </Link>
-            <button
-              onClick={handleRestart}
-              className="w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center text-2xl text-orange-500 hover:bg-gray-100 transition-colors"
-              title="Restart"
-            >
-              <FaRedo />
-            </button>
-          </div>
-        </div>
-      )}
+        {/* Game Over Overlay - shown when player loses */}
+        {isGameOver && !isWinner && (
+          <GameOverOverlay
+            word={word}
+            score={score}
+            gems={gems}
+            onPlayAgain={handleNewGame}
+          />
+        )}
 
-      {/* Game Content */}
-      <div className={`transition-opacity duration-300 ${isPaused ? 'opacity-50' : ''}`} style={{ position: 'relative', zIndex: 10 }}>
-        <div className="card stack-lg">
-          <div className="section-animate">
-            <h1 className="title">Play</h1>
-            <p className="subtitle">Guess the word before the hangman is complete.</p>
-          </div>
-
-          {word ? (
-            <div className="stack-md">
-              {wordHint && (
-                <p className="mb-2 section-animate delay-1">Hint: {wordHint}</p>
-              )}
-              <div className="section-animate delay-2 text-xl tracking-widest">
-                <MaskedText text={word} guessedLetters={guessedLetters} />
+        {/* Game Content */}
+        <div style={{ position: 'relative', zIndex: 10 }}>
+          <div className="card stack-lg">
+            {/* Top Bar - Score and Pause */}
+            <div className="flex justify-between items-center mb-6">
+              {/* Coin and Diamond */}
+              <div className="flex items-center space-x-4">
+                {/* Coin */}
+                <div className="flex items-center bg-white bg-opacity-30 rounded-full px-3 py-1.5 shadow-md">
+                  <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center mr-2">
+                    <span className="text-sm font-bold">$</span>
+                  </div>
+                  <span className="text-base font-bold">{score}</span>
+                </div>
+                
+                {/* Diamond */}
+                <div className="flex items-center bg-white bg-opacity-30 rounded-full px-3 py-1.5 shadow-md">
+                  <div className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center mr-2">
+                    <span className="text-sm font-bold">G</span>
+                  </div>
+                  <span className="text-base font-bold">{gems}</span>
+                </div>
               </div>
-              <div className="section-animate delay-3">
-                <LetterButton 
-                  text={word} 
-                  guessedLetters={guessedLetters} 
-                  onLetterClick={handleLetterClick} 
-                  disabled={isPaused}
-                />
-              </div>
-              <div className="section-animate delay-3">
-                <Hangman step={step} />
-              </div>
+
+              {/* Pause Button */}
+              <PauseButton
+                isPaused={isPaused}
+                onPauseToggle={togglePause}
+                volume={volume}
+                onVolumeChange={handleVolumeChange}
+                onRestart={handleNewGame}
+                className="w-10 h-10"
+              />
             </div>
-          ) : (
-            <div className="text-center py-8">
-              <p>No word selected. Please go back and choose a game mode.</p>
-              <Link to="/" className="text-blue-500 hover:underline mt-4 inline-block">
-                Back to Home
-              </Link>
-            </div>
-          )}
 
-          <div className="section-animate delay-1 stack-sm">
-            <Link to="/" className="text-blue-300 hover:underline">Home</Link>
-            <Link to='/start' className='text-blue-300 hover:underline'>Set Multiplayer Word</Link>
+            <div className="section-animate">
+              <h1 className="title">Play</h1>
+              <p className="subtitle">Guess the word before the hangman is complete.</p>
+            </div>
+
+            {word ? (
+              <div className="stack-md">
+                {wordHint && (
+                  <p className="mb-2 section-animate delay-1">Hint: {wordHint}</p>
+                )}
+                <div className="section-animate delay-2 text-xl tracking-widest">
+                  <MaskedText text={word} guessedLetters={guessedLetters} />
+                </div>
+                <div className="section-animate delay-3">
+                  <LetterButton 
+                    text={word} 
+                    guessedLetters={guessedLetters} 
+                    onLetterClick={handleLetterClick} 
+                    disabled={isPaused || isGameOver}
+                  />
+                </div>
+                <div className={`section-animate delay-3 transition-transform duration-500 ${isGameOver ? 'translate-x-full' : ''}`}>
+                  <Hangman step={step} className="mx-auto" />
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p>No word selected. Please go back and choose a game mode.</p>
+                <Link to="/" className="text-blue-500 hover:underline mt-4 inline-block">
+                  Back to Home
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

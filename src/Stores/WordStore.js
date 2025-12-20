@@ -6,32 +6,24 @@ const useWordStore = create((set) => ({
     wordList: [],
     word: '',
     wordHint: '',
-    setWordList: (list) => {
-        set((state) => {
-            console.log("state printing", state);
-            //whatever you return from here will be the new state
-            return {
-                ...state,
-                wordList: list
-            }
-        });
-    },
-    setWord: (newWord) => {
-        set((state) => {
-            return {
-                ...state,
-                word: newWord
-            }
-        });
-    },
-    setWordHint: (newHint) => {
-        set((state) => {
-            return {
-                ...state,
-                wordHint: newHint
-            }
-        });
+    
+    setWordList: (list) => set({ wordList: list }),
+    setWord: (word) => set({ word }),
+    setWordHint: (wordHint) => set({ wordHint }),
+    
+    fetchRandomWord: async () => {
+        try {
+            const response = await fetch('http://localhost:3000/words');
+            const words = await response.json();
+            const randomIndex = Math.floor(Math.random() * words.length);
+            const randomWord = words[randomIndex];
+            set({ 
+                word: randomWord.wordValue,
+                wordHint: randomWord.wordHint || ''
+            });
+        } catch (error) {
+            console.error('Error fetching random word:', error);
+        }
     }
 }));
-
 export default useWordStore;
